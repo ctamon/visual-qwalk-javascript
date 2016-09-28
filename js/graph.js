@@ -15,14 +15,14 @@ graph.matrixToList = function(A) {
 	// ToDo: assert numRows == numCols
 
 	var G = [];
-	for (var i = 0; i < numRows){
-		for (var j = 0; j < numCols) {
+	for (var i = 0; i < numRows; i++){
+		for (var j = 0; j < numCols; j++) {
 			if (A[i][j] != 0) {
 				G.push([i,j]);
 			}
 		}
 	}
-}
+};
 
 // Turn the adjacency list to an adjacency matrix
 //
@@ -33,7 +33,7 @@ graph.matrixToList = function(A) {
 // 
 graph.listToMatrix = function(G) {
 	// ToDo
-}
+};
 
 // Create a path graph
 //
@@ -54,7 +54,7 @@ graph.pathGraph = function(n) {
 	}
 
 	return A;
-}
+};
 
 // Create a cycle graph
 //
@@ -77,7 +77,7 @@ graph.cycleGraph = function(n) {
 	}
 
 	return A;
-}
+};
 
 // Create a complete graph on n matricies
 //
@@ -99,7 +99,7 @@ graph.completeGraph = function(n) {
 	}
 
 	return A;
-}
+};
 
 // Create a complete oriented graph
 //
@@ -125,4 +125,4 @@ graph.pathGraph = function(n) {
 	}
 
 	return A;
-}
+};
