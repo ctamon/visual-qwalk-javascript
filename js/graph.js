@@ -1,3 +1,7 @@
+// ***** Missing ******
+// draw_graph(graph)
+// place_graph(graph)
+
 var graph = {};
 
 // Turn the adjacency matrix to an adjacency list
@@ -8,7 +12,7 @@ var graph = {};
 // return (List): Adjacency List
 //
 graph.matrixToList = function(A) {
-	var size = math.size(A);
+	var size = numeric.dim(A);
 	var numRows = size[0];
 	var numCols = size[1];
 
@@ -43,7 +47,7 @@ graph.listToMatrix = function(G) {
 // returns (Matrix): the (n x x) adjacency matrix of a path graph
 //
 graph.pathGraph = function(n) {
-	var A = math.zeros(n, n);
+	var A = numeric.repr([n, n], 0);
 
 	for (var i = 0; i < n; i++) {
 		for (var j = 0; j < n; j++) {
@@ -64,7 +68,7 @@ graph.pathGraph = function(n) {
 // returns (Matrix): the (n x n) adjacency matrix of a cycle graph
 //
 graph.cycleGraph = function(n) {
-	var A = math.zeros(n, n);
+	var A = numeric.repr([n, n], 0);
 
 	for (var i = 0; i < n; i++) {
 		for (var j = 0; j < n; j++) {
@@ -88,7 +92,7 @@ graph.cycleGraph = function(n) {
 //	for a complete graph
 //
 graph.completeGraph = function(n) {
-	var A = math.zeros(n, n);
+	var A = numeric.repr([n, n], 0);
 
 	for (var i = 0; i < n; i++) {
 		for (var j = 0; j < n; j++) {
@@ -110,7 +114,7 @@ graph.completeGraph = function(n) {
 // 	a complete oriented graph
 //
 graph.pathGraph = function(n) {
-	var A = math.zeros(n, n);
+	var A = numeric.repr([n, n], 0);
 
 	for (var i = 0; i < n; i++) {
 		for (var j = 0; j < n; j++) {
