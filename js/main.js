@@ -6,7 +6,9 @@ var cy;
 
 function main() {
 
-//Init main graph objeccy = cytoscape({
+//Init main graph object
+
+cy = cytoscape({
 
 	container: document.getElementById('hook'),
 
@@ -30,3 +32,4 @@ initGraph();
 
 	
 }
+
