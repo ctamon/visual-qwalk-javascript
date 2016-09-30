@@ -1,9 +1,11 @@
-
 function valToColor( value )
 {
 
-	if(value < 0 || value > 1) return null;
+	if(value < 0 || value > 1) return '#000000';
 
-	return Math.floor(value * 0xFF) << 16;
+	var c = Math.floor(value * 255);
+
+	if(c < 16) return '#0' + c.toString(16) + '0000';
+	else return '#' + c.toString(16) + '0000';
 
 }
