@@ -1,20 +1,19 @@
 
-
-qwalkObj = {};
-
-
-qwalkObj.ani = null;
-
-qwalkObj.curIdTable = null; //A list of all node ids that exist now
-qwalkObj.ampl = null;
-qwalkObj.prob = null;
-qwalkObj.mat = null;
-
-qwalkObj.curTime = 0;
-qwalkObj.deltaTime = 0.01;
+qwalk = {};
 
 
-qwalkObj.qwalk_me = function()
+qwalk.ani = null;
+
+qwalk.curIdTable = null; //A list of all node ids that exist now
+qwalk.ampl = null;
+qwalk.prob = null;
+qwalk.mat = null;
+
+qwalk.curTime = 0;
+qwalk.deltaTime = 0.01;
+
+
+qwalk.start = function()
 {
 
 
@@ -81,7 +80,7 @@ qwalkObj.qwalk_me = function()
 
 
 //The loop code
-qwalk.stepqw = function()
+qwalk.step = function()
 {
 
 	var U = qwalk(mat,curTime);
