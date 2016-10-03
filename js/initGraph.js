@@ -14,7 +14,7 @@ function initGraph()
 
 		data:{
 
-			id: 'bagel1'
+			id: 'node1'
 
 		}
 
@@ -24,7 +24,7 @@ function initGraph()
 
 		data:{
 
-			id: 'bagel2'
+			id: 'node2'
 
 		}
 
@@ -34,11 +34,13 @@ function initGraph()
 
 		data:{
 
-			id: 'bagel3'
+			id: 'node3'
 
 		}
 
 	});
+
+	cy.getElementById('node1').data('isStart',true);
 
 
 	//Edges
@@ -47,9 +49,22 @@ function initGraph()
 
 		data:{
 
-			id: 'casserole12',
-			source: 'bagel1',
-			target: 'bagel2'
+			id: 'edge12',
+			source: 'node1',
+			target: 'node2'
+
+		}
+
+	});
+
+
+	cy.add({
+
+		data:{
+
+			id: 'edge23',
+			source: 'node2',
+			target: 'node3'
 
 		}
 
@@ -59,21 +74,9 @@ function initGraph()
 
 		data:{
 
-			id: 'casserole23',
-			source: 'bagel2',
-			target: 'bagel3'
-
-		}
-
-	});
-
-	cy.add({
-
-		data:{
-
-			id: 'casserole31',
-			source: 'bagel3',
-			target: 'bagel1'
+			id: 'edge31',
+			source: 'node3',
+			target: 'node1'
 
 		}
 
