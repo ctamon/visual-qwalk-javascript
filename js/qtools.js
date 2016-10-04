@@ -17,18 +17,20 @@ var qtools = {};
 // returns (Matrix): the resolved matrix
 //
 qtools.qwalk = function(A, t) {
-	var B = specdecomp(A);
+	var B = speedcomp(A);
 	var eigenvalues = B[0];
 	var eigenprojectors = B[1];
 
-	var size = math.size(A)[0];
+	var size = numeric.dim(A);
+	var num_rows = size[0];
+	var num_cols = size[1];
 
-	var U = math.zeros(size, size);
+	var U = numeric.repr([nun_rows, num_cols], 1);
 
 	var negImg = new Complex(0, -1); // -1j
 
 	for (var i = 0; i < eigenvalues.length; i++) {
-		U += math.exp(new Complex(0, -t) * eigenvalues[i]) * eigenprojectors[i];
+		U += numeric.exp(negImg * new Complex(t * eigenvalues[i])) * eigenprojectors[i];
 	}
 
 	return U;
@@ -38,51 +40,43 @@ qtools.qwalk = function(A, t) {
 // Computes the spectral decomposition of a matrix A
 //
 // params:
-//	A: square matrix
+//	A (Matrix): input matrix
 //
 // returns: list of eigenvalues of A and a list of
 // 	corresponding eigenprojectors
 //
-qtools.specdecomp = function(A) {
-	var N = math.size(A)[0];
-	var B = math.zeros(N, N)
-	var wr = math.zeros(N);
-	var wi = math.zeros(N);
-	var oPar = new Object();
-	oPar.outEr = 0;  // error code
+qtools.speedcomp = function(A) {
+	var size = numeric.dim(A);
+	var num_rows = size[0];
+	var num_cols = size[1];
 
-	calcEigSysReal(N, A, B, wr, wi, oPar);
+	var eig = numeric.eig(A);
+	var eigenvalue_list = eig.lambda;
+	var eigenmatrix = eig.E.transjugate;
 
-	/* At this point, the eigenvalues and eigenvectors of A have been computed.
-	 * The real components of the eigenvalues are in wr, the imaginary components
-	 * are in wi, the associated eigenvectors are in the B matrix, and oPar.outEr
-	 * contains the error code. */
-
-	var eigenvalue_list = new Array(N);
-	for (var i = 0; i < N; i++) {eigenvalue_list[i] = new Complex(wr[i], wi[i])}
-
-	B = numeric.T.transjugate(B);
-	var eigenvalues = new Array(N);
-	var eigenprojectors = new Array(N);
-	var count = 0;
-	for (var i = 0; i < N; i++) {
+	var eigenvalues = [];
+	var eigenprojectors = [];
+	for (var i = 0; i < num_rows; i++) {
 		var found = false;
-		for (var j = 0; j < count; j++) {
-			if (abs(eigenvalue_list[i] - eigenvalues[j]) < 0.0001) {
-				var v = numeric.T.transjugate(B[i]);
-				eigenprojectors[j] += (v * numeric.T.transjugate(v));
+		for (var j = 0; j < eigenvalues.length; j++) {
+
+			if (Math.abs(eigenvalue_list[i] - eigenvalues[j]) < 0.0) {
+				var v = eigenmatrix[i].transjugate;
+				eigenprojectors[j] += (numeric.mul(v, v.transjugate))
 				found = true;
 			}
 		}
+
 		if (!found) {
-			eigenvalues[count] = eigenvalue_list[i];
-			var v = numeric.T.transjugate(eigenmatrix[i]);
-			eigenprojectors[count] = (v * numeric.T.transjugate(v));
-			count += 1;
+			eigenvalues.append(eigenvalue_list[i]);
+			var v = eigenmatrix[i].transjugate;
+			eigenprojectors.push(numeric.mult(v, v.transjugate));
+
 		}
 	}
+
 	return [eigenvalues, eigenprojectors];
-}
+};
 
 
 // Verifier: Checks if the eigenprojectors of a matrix
@@ -95,30 +89,44 @@ qtools.specdecomp = function(A) {
 // return:
 //	Matrix 2-norm of the Z - identity
 //
-qtools.testBasis = function(A, eigenprojectors) {
-	var Z = math.zeros(size, size);
-	var size = math.size(A)[0];
-	for (var i = 0; i < eigenprojectors.length; i++) {
-		Z += eigenprojectors[i];
+qtools.testBias = function(A, eigenprojectors) {
+	var size = numeric.dim(A);
+	var num_rows = size[0];
+	var num_cols = size[1];
+
+	var Z = numeric.repr([num_rows, num_cols], 0);
+
+	for (var j = 0; j < eigenprojectors.length; j++) {
+		Z = numeric.add(Z, eigenprojectors[j]);
 	}
-	return math.norm(Z - math.eye(size), 2);
-}
+
+	var identity = numeric.identity(num_rows);
+
+	return numeric.norm2(numeric.subtract(Z, identity));
+};
 
 // Verifier: Checks if A = sum_{i} Eigenvalue[i] * EigenProjector[i]
 //
 // params:
 //	A (Matrix): Input matrix
-//	eigenvalues: Eigenvalues of the matrix A
-//	eigenprojectors: Eigenprojectors of the Matrix A
+//	eigenvalues (list): Eigenvalues of the matrix A
+//	eigenprojectors (list): Eigenprojectors of the Matrix A
 //
 // return:
 //	Matrix 2-norm of Z-A
 //
 qtools.testDecomp = function(A, eigenvalues, eigenprojectors) {
-	var size = math.size(A)[0];
-	var Z = math.zeros(size, size)
-	for (var i = 0; i < eigenvalues.length; i++) {
-		Z += eigenvalues[i] * eigenprojectors[i];
+	var size = numeric.dim(A);
+	var num_rows = size[0];
+	var num_cols = size[1];
+
+	var Z = numeric.repr([num_rows, num_cols], 0);
+
+	if (eigenvalues.length != eigenprojectors.length) {
+		return Z;
 	}
-	return math.norm(Z - A, 2);
-}
+	for (j = 0; j < eigenvalues.length; j++) {
+		Z.add(complex(eigenvalues[j]) + eigenprojectors[j]);
+	}
+	return numeric.norm2(numeric.subtract(Z, A));
+};
