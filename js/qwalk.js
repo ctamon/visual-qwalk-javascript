@@ -55,23 +55,32 @@ qwalk.start = function()
 
 
 	//Set time 
-	curTime = 0;
+	qwalk.curTime = 0;
 
 
 	//The loop
-	ani = cy.animation({
+	qwalk.loop();
 
+}
+
+
+qwalk.loop = function()
+{
+
+	ani = cy.animation({
+	
 		complete: function(){
 
-			stepqw();
+			qwalk.step();
 
-			ani.play();
+			qwalk.loop();
 
 		},
 
-		duration: 1000*deltaTime
-
+		duration: 17
+	
 	});
+
 
 	ani.play();
 
@@ -83,12 +92,22 @@ qwalk.start = function()
 qwalk.step = function()
 {
 
+	//I will assume the matrix is in numeric complex vector form
+
 	var U = qwalk(mat,curTime);
 	var i;
+
+	var ampl = new numeric.t(new Array(cy.length),new Array(cy.length))	
+	var prob = new Array(cy.length);
+
+
 	for(i=0;i<cy.length;++i)
-		ampl[i] = U[i][0];
+		ampl[i] = numeric.t(U.x[i][0],U.y[i][0]); //ampl[i] = U[i][0]
 	for(i=0;i<cy.length;++i)
-		prob[i] = ampl[i]*ampl.conj()[i];
+		prob[i] = (numeric.t(ampl.x[i],ampl.y[i])*numeric.conj(ampl)[i]).x;
+
+	for(i=0;i<cy.length;++i)
+		cy.getElementById(curIdTable[i]).data('value',prob[i]);
 
 	//TODO: Finish. Note that we need a good way to handle complex numbers
 
