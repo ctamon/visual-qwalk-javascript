@@ -51,8 +51,8 @@ qtools.speedcomp = function(A) {
 	var num_cols = size[1];
 
 	var eig = numeric.eig(A);
-	var eigenvalue_list = eig.lambda.x;
-	var eigenmatrix = eig.E.transjugate.x;
+	var eigenvalue_list = eig.lambda;
+	var eigenmatrix = eig.E.transjugate;
 
 	var eigenvalues = [];
 	var eigenprojectors = [];
@@ -62,7 +62,7 @@ qtools.speedcomp = function(A) {
 
 			if (Math.abs(eigenvalue_list[i] - eigenvalues[j]) < 0.0) {
 				var v = eigenmatrix[i].transjugate;
-				eigenprojectors[j] += (numeric.mul(v.x, v.transjugate.x))
+				eigenprojectors[j] += (numeric.mul(v, v.transjugate))
 				found = true;
 			}
 		}
@@ -70,7 +70,7 @@ qtools.speedcomp = function(A) {
 		if (!found) {
 			eigenvalues.append(eigenvalue_list[i]);
 			var v = eigenmatrix[i].transjugate;
-			eigenprojectors.push(numeric.mult(v.x, v.transjugate.x));
+			eigenprojectors.push(numeric.mult(v, v.transjugate));
 
 		}
 	}
