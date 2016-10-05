@@ -43,7 +43,7 @@ qtools.qwalk = function(A, t) {
 // 	corresponding eigenprojectors
 //
 qtools.specdecomp = function(A) {
-	var N = math.size(A)[0]
+	var N = numeric.dim(A)[0]
 	var B = numeric.rep([N, N], 0)
 	var wr = numeric.rep(N, 0)
 	var wi = numeric.rep(N, 0)
