@@ -5,13 +5,41 @@ qwalk = {};
 qwalk.ani = null;
 
 qwalk.curIdTable = null; //A list of all node ids that exist now
-qwalk.ampl = null;
-qwalk.prob = null;
 qwalk.mat = null;
 
-qwalk.curTime = 0;
-qwalk.deltaTime = 0.01;
+function valToColor(value) {
+	if(value < 0 || value > 1) return '#000000'
 
+	var c = Math.floor(value * 255)
+
+	if(c < 16) return '#0' + c.toString(16) + '0000'
+	else return '#' + c.toString(16) + '0000'
+}
+
+
+qwalk.init = function(A) {
+	var shape = math.size(A)
+	var num_rows = shape[0], num_cols = shape[1]
+	if (num_rows != num_cols) {
+		throw new Error('A must be a square matrix')
+	}
+
+	graph.place_graph(graph.matrixToList(A))
+	qwalk.curTime = 0
+	qwalk.deltaTime = 0.01
+	qwalk.mat = A
+}
+
+qwalk.step = function() {
+	var U = qtools.qwalk(numeric.clone(qwalk.mat), qwalk.curTime)
+	for (var i = 0; i < numeric.dim(qwalk.mat)[0]; i++) {
+		var ampl = U.getBlock([i, 0], [i, 0])
+		//console.log(numeric.prettyPrint(ampl))
+		var prob = ampl.mul(ampl.conj()).x[0]
+		cy.$('#n' + i.toString()).data('bg', valToColor(prob))
+	}
+	qwalk.curTime += qwalk.deltaTime
+}
 
 qwalk.start = function()
 {
@@ -41,7 +69,7 @@ qwalk.start = function()
 		for(j = 0 ; j < cy.length ; ++j)
 		{
 
-			mat[i][j] = (cy.nodes()[i].edgesWith(cy.nodes()[j]).length != 0) ? 1 : 0;	
+			mat[i][j] = (cy.nodes()[i].edgesWith(cy.nodes()[j]).length != 0) ? 1 : 0;
 
 		}
 	}
@@ -51,10 +79,10 @@ qwalk.start = function()
 	ampl = new Array(cy.length);
 	prob = new Array(cy.length);
 	ampl[startIndex] = 1;
-	prob[startIndex] = 1;	
+	prob[startIndex] = 1;
 
 
-	//Set time 
+	//Set time
 	qwalk.curTime = 0;
 
 
@@ -68,7 +96,7 @@ qwalk.loop = function()
 {
 
 	ani = cy.animation({
-	
+
 		complete: function(){
 
 			qwalk.step();
@@ -78,37 +106,10 @@ qwalk.loop = function()
 		},
 
 		duration: 17
-	
+
 	});
 
 
 	ani.play();
-
-}
-
-
-
-//The loop code
-qwalk.step = function()
-{
-
-	//I will assume the matrix is in numeric complex vector form
-
-	var U = qwalk(mat,curTime);
-	var i;
-
-	var ampl = new numeric.t(new Array(cy.length),new Array(cy.length))	
-	var prob = new Array(cy.length);
-
-
-	for(i=0;i<cy.length;++i)
-		ampl[i] = numeric.t(U.x[i][0],U.y[i][0]); //ampl[i] = U[i][0]
-	for(i=0;i<cy.length;++i)
-		prob[i] = (numeric.t(ampl.x[i],ampl.y[i])*numeric.conj(ampl)[i]).x;
-
-	for(i=0;i<cy.length;++i)
-		cy.getElementById(curIdTable[i]).data('value',prob[i]);
-
-	//TODO: Finish. Note that we need a good way to handle complex numbers
 
 }

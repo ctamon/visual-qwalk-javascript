@@ -6,30 +6,31 @@ var cy;
 
 function main() {
 
-//Init main graph object
+	//Init main graph object
+	console.log('Initializing cytoscape.')
+	cy = cytoscape({
+		container: document.getElementById('hook'),
 
-cy = cytoscape({
+		style: [
+			{
+				selector: 'node',
+				style: {
+					shape: 'circle',
+					'background-color': function(ele){return ele.data('bg')}
+				}
+			}
+		],
+	})
 
-	container: document.getElementById('hook'),
-
-	style: cytoscape.stylesheet()
-		.selector('node')
-		.style({
-
-			shape: 'circle',
-
-			//TODO: Link color to data
-			'background-color': function(ele){return valToColor(0);}
-
-		})
-		
-
-});
-
-
-//Create dummy graph
-initGraph();
-
-	
+	//Create dummy graph and animate quantum walk
+	initGraph();
+	cy.animate({
+		step: qwalk.step,
+		duration: 100000
+	})
 }
 
+function initGraph() {
+	var A = graph.pathGraph(3);
+	qwalk.init(A);
+}
