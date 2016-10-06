@@ -18,7 +18,7 @@ function valToColor(value) {
 
 
 qwalk.init = function(A) {
-	var shape = math.size(A)
+	var shape = numeric.dim(A)
 	var num_rows = shape[0], num_cols = shape[1]
 	if (num_rows != num_cols) {
 		throw new Error('A must be a square matrix')
@@ -34,8 +34,7 @@ qwalk.step = function() {
 	var U = qtools.qwalk(numeric.clone(qwalk.mat), qwalk.curTime)
 	for (var i = 0; i < numeric.dim(qwalk.mat)[0]; i++) {
 		var ampl = U.getBlock([i, 0], [i, 0])
-		//console.log(numeric.prettyPrint(ampl))
-		var prob = ampl.mul(ampl.conj()).x[0]
+		var prob = ampl.mul(ampl.conj()).x[0][0]
 		cy.$('#n' + i.toString()).data('bg', valToColor(prob))
 	}
 	qwalk.curTime += qwalk.deltaTime

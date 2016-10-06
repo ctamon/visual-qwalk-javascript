@@ -44,7 +44,7 @@ qtools.qwalk = function(A, t) {
 //
 qtools.specdecomp = function(A) {
 	var N = numeric.dim(A)[0]
-	var B = numeric.rep([N, N], 0)
+	var B = numeric.rep([N, 2*N], 0)
 	var wr = numeric.rep(N, 0)
 	var wi = numeric.rep(N, 0)
 	var oPar = new Object()
@@ -62,11 +62,33 @@ qtools.specdecomp = function(A) {
 	 }
 
 	var eigenvalue_list = new Array(N)
+	var hasComplex = false
 	for (var i = 0; i < N; i++) {
 		eigenvalue_list[i] = numeric.t([wr[i]], [wi[i]])
+		if (wi[i] > 0) {hasComplex = true}
 	}
 
-	B = numeric.t(B, numeric.rep([N, N], 0)).transjugate();
+
+	if (!hasComplex) {
+		var re = numeric.rep([N, N], 0)
+		for (var row = 0; row < N; row++) {
+			for (var col = 0; col < N; col++) {
+				re[row][col] = B[row][col]
+			}
+		}
+		B = numeric.t(re, numeric.rep([N, N], 0))
+	}
+	else {
+		var re = numeric.rep([N, N], 0)
+		var im = numeric.rep([N, N], 0)
+		for (var row = 0; row < N; row++) {
+			for (var col = 0; col < 2*N; col += 2) {
+				re[row][col] = B[row][col]
+				im[row][col] = B[row][col+1]
+			}
+		}
+		B = numeric.t(re, im)
+	}
 	var eigenvalues = []
 	var eigenprojectors = []
 	for (var i = 0; i < N; i++) {
