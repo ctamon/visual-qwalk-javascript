@@ -54,7 +54,8 @@ html, body {
 }
 
 .openButton {
-	font-size: 30px;
+	font-size: 60px;
+    color: #878787;
 	cursor: pointer;
 }
 
@@ -63,6 +64,7 @@ html, body {
 .playButton {
 	font-size: 30px;
 	cursor: pointer;
+    color: #06b234;
 	position: absolute;
 	right: 100px;
 	bottom: 50px;
