@@ -31,13 +31,13 @@ html, body {
     padding: 8px 8px 8px 32px;
     text-decoration: none;
     font-size: 25px;
-    color: #FFFFFF;
+    color: #000000;
     display: block;
     transition: 0.3s
 }
 
 .sidenav a:hover, .offcanvas a:focus{
-    color: #f1f1f1;
+    color: #DDDDDD;
 }
 
 .sidenav .closebtn {
@@ -62,10 +62,10 @@ html, body {
 /* Play Button */
 
 .playButton {
-	font-size: 30px;
 	cursor: pointer;
-    color: #06b234;
+    border: 0;
+    width: 50px;
 	position: absolute;
-	right: 100px;
+	right: 50px;
 	bottom: 50px;
 }
