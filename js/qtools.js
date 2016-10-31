@@ -107,7 +107,7 @@ qtools.specdecomp = function(A) {
 		}
 	}
 	return [eigenvalues, eigenprojectors]
-}
+};
 
 
 // Verifier: Checks if the eigenprojectors of a matrix

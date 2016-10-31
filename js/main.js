@@ -7,7 +7,7 @@ var cy;
 function main() {
 
 	//Init main graph object
-	console.log('Initializing cytoscape.')
+	console.log('Initializing cytoscape.');
 	cy = cytoscape({
 		container: document.getElementById('hook'),
 
@@ -19,18 +19,12 @@ function main() {
 					'background-color': function(ele){return ele.data('bg')}
 				}
 			}
-		],
-	})
+		]
+	});
 
 	//Create dummy graph and animate quantum walk
-	initGraph();
-	cy.animate({
-		step: qwalk.step,
-		duration: 100000
-	})
-}
-
-function initGraph() {
 	var A = graph.pathGraph(3);
-	qwalk.init(A);
-}
+	qwalk.startFromMatrix(A,0);
+
+};
+

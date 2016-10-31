@@ -44,7 +44,7 @@ function getVertices(G) {
 		}
 	}
 	return vertices
-}
+};
 
 // Turn the adjacency list to an adjacency matrix
 //
@@ -85,7 +85,7 @@ graph.place_graph = function(graph) {
 
 	// compute placements
 	cy.layout({name: 'circle'})
-}
+};
 
 // Create a path graph
 //
@@ -99,7 +99,7 @@ graph.pathGraph = function(n) {
 
 	for (var i = 0; i < n; i++) {
 		for (var j = 0; j < n; j++) {
-			if (math.abs(i-j) == 1) {
+			if (Math.abs(i-j) == 1) {
 				A[i][j] = 1.0;
 			}
 		}
