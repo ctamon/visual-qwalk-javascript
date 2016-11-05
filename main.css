@@ -33,7 +33,7 @@ html, body {
     font-size: 25px;
     color: #000000;
     display: block;
-    transition: 0.3s
+    transition: 0.5s
 }
 
 .sidenav a:hover, .offcanvas a:focus{
@@ -54,6 +54,7 @@ html, body {
 }
 
 .openButton {
+    transition: margin-left 0.5s;
 	font-size: 60px;
     color: #878787;
 	cursor: pointer;

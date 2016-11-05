@@ -25,13 +25,14 @@
 
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  	<a href="#" onclick="setGraphState(addNodeState)">Add Node</a>
-  	<a href="#" onclick="setGraphState(deleteNodeState)">Delete Node</a>
+  		<a href="#" onclick="setGraphState(addNodeState)">Add Node</a>
+  		<a href="#" onclick="setGraphState(deleteNodeState)">Delete Node</a>
 		<a href="#" onclick="setGraphState(addEdgeState_FirstClick)">Add Edge</a>
 		<a href="#" onclick="setGraphState(deleteEdgeState)">Delete Edge</a>
 	</div>
 
-	<span class="openButton" onclick="openNav()">&#9776;</span>
+	<input id="SideNavBtn" class="openButton" type="image" alt="Open" src="SideNavButton.png" onclick="openNav()"> 
+	<!--&#9776; -->
 
 	<input id="PlayButton" class="playButton" type="image" alt="Play" src="PlayButton.png" onclick="play()">
 </body>

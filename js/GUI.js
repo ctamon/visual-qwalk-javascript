@@ -9,13 +9,22 @@ addEdgeState_SecondClick = 5
 souce_node = undefined
 
 function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-    //document.getElementById("SideNavBtn")style..margin-left = "250px";
+	//if (document.getElementById("SideNavBtn").alt == "Open") {
+		//document.getElementById("SideNavBtn").alt == "Close";
+    	document.getElementById("mySidenav").style.width = "250px";
+    	document.getElementById("SideNavBtn").style.marginLeft = "250px";
+    //}	else {
+	//document.getElementById("SideNavBtn").alt == "Open";
+    	//document.getElementById("mySidenav").style.width = "0";
+    	//document.getElementById("SideNavBtn").style.marginLeft = "0";
+    
 }
 
 function closeNav() {
+	//document.getElementById("SideNavBtn").alt == "Open";
     document.getElementById("mySidenav").style.width = "0";
-    //document.getElementById("SideNavBtn")style..margin-left = "0";
+    document.getElementById("SideNavBtn").style.marginLeft = "0";
+    
 }
 
 function setGraphState(state) {
@@ -23,16 +32,12 @@ function setGraphState(state) {
 }
 
 function play() {
-	var element = document.getElementById("PlayButton");
-	if (element.alt == "Play") {
-		element.alt = "Stop";
-		element.src = "StopButton.png";
-    	//elmt.innerHTML = "Stop";
-		//elmt.style.backgroundColor = 'red';
-}	else {
-		element.alt = "Play";
-		element.src = "PlayButton.png";
-    //elmt.innerHTML = "Play";
-	//elmt.style.backgroundColor = 'green';
+	if (document.getElementById("PlayButton").alt == "Play") {
+		document.getElementById("PlayButton").alt = "Stop";
+		document.getElementById("PlayButton").src = "StopButton.png";	
+	}	else {
+		document.getElementById("PlayButton").alt = "Play";
+		document.getElementById("PlayButton").src = "PlayButton.png";
+    
 }
 }
