@@ -10,6 +10,7 @@ qwalk.deltaTime = 0.01;
 qwalk.walkStartIndex = -1;
 
 qwalk.isStopped = false;
+qwalk.animationStatus = {isStopped: true,isRunning: false};
 
 function valToColor(value) {
 	if(value < 0 || value > 1) return '#000000'
@@ -41,26 +42,28 @@ qwalk.startFromMatrix = function(A,start) {
 	qwalk.curTime = 0;
 	qwalk.mat = A;
 	
-	qwalk.isStopped = false;
+	//Set the animation status's flags appropriately
+	qwalk.setAnimationStatusToStartFlags();
+	
+	//Loop
 	qwalk.loop();
 	
 };
 
-/* Gabe's code. Still needs to be tested
+
 
 qwalk.startFromGraph = function()
 {
-	
-	var nodes = cy.nodes();
 
-	//Make id table
-	qwalk.walkIdTable = new Array(nodes.length);
+	//Get id table
+	qwalk.walkIdTable = qmanip.nodeIdTable;
 	var startIndex = -1;
 	
-	for(var i=0 ; i<nodes.length ; ++i)
+	var numOfNodes = qwalk.walkIdTable.length;
+	
+	for(var i=0 ; i<numOfNodes ; ++i)
 	{
-		qwalk.walkIdTable[i] = nodes[i].id();
-		if(nodes[i].data('isStart') === true)
+		if(qmanip.getNode(qwalk.walkIdTable[i]).data('isStart') === true)
 			startIndex = i;
 	}
 
@@ -73,20 +76,16 @@ qwalk.startFromGraph = function()
 	qwalk.walkStartIndex = startIndex;
 
 	//Build adjacency matrix
-	qwalk.mat = new Array(nodes.length).fill(new Array(nodes.length));
-	for(var i = 0 ; i < nodes.length ; ++i)
-	{
-		for(var j = 0 ; j < nodes.length ; ++j)
+	qwalk.mat = numeric.rep([numOfNodes,numOfNodes],-1);
+	for(var j = 0 ; j < numOfNodes ; ++j)
+	{		
+		for(var k=0; k < numOfNodes ; ++k)
 		{
-			
-			var node_i = qmanip.getNode(qwalk.walkIdTable[i]);
-			var node_j = qmanip.getNode(qwalk.walkIdTable[j]);
-			
-			qwalk.mat[i][j] = (((node_i.edgesWith(node_j)).length != 0) ? 1 : 0);
-
+			qwalk.mat[j][k] = ((qmanip.getEdges(qwalk.walkIdTable[j],qwalk.walkIdTable[k]).length != 0) ? 1 : 0);
 		}
 	}
 
+	
 	//Make ampl and prob
 	//ampl = new Array(cy.length);
 	//prob = new Array(cy.length);
@@ -98,31 +97,50 @@ qwalk.startFromGraph = function()
 	qwalk.curTime = 0;
 
 
+	//Set the animation status's flags appropriately
+	qwalk.setAnimationStatusToStartFlags();
+	
 	//The loop
 	qwalk.loop();
 
 };
 
-qwalk.stop = function()
+qwalk.setAnimationStatusToStartFlags = function()
 {
-	qwalk.isStopped = true;
-	if(qwalk.ani !== null)
-		ani.stop();
+	qwalk.animationStatus.isStopped = false;
+	qwalk.animationStatus.isRunning = true;
 }
 
+qwalk.stop = function()
+{
+	
+		qwalk.animationStatus.isStopped = true;
+	
+		qwalk.pause();
+	
+		cy.nodes().data('bg','#000000');
+	
+		qwalk.curTime = 0;
+	
+}
 
 qwalk.pause = function()
 {
-	qwalk.stop();
+	qwalk.animationStatus.isRunning = false;
+	if(qwalk.ani !== null)
+		qwalk.ani.stop();
 }
 
 qwalk.unpause = function()
 {
-	qwalk.isStopped = false;
-	qwalk.loop();
+	if(!qwalk.animationStatus.isStopped)
+	{
+		qwalk.animationStatus.isRunning = true;
+		qwalk.loop();
+	}
+	else return -1;
 }
 
-*/
 
 qwalk.step = function() {
 	var startIndex = qwalk.walkStartIndex;
@@ -144,11 +162,11 @@ qwalk.loop = function()
 	qwalk.ani = cy.animation({
 
 		complete: function(){
-
-			qwalk.step();
-
-			qwalk.loop();
-
+			if(qwalk.animationStatus.isRunning)
+			{
+				qwalk.step();
+				qwalk.loop();
+			}
 		},
 
 		duration: 1000*qwalk.deltaTime
