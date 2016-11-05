@@ -10,9 +10,9 @@ qmanip.compareNodeIds= function(id1,id2)
 {
 	var idNum1 = parseInt(id1.slice(1),10);
 	var idNum2 = parseInt(id2.slice(1),10);
-	
+
 	return idNum1-idNum2;
-	
+
 }
 
 //Accepts an id and returns the node
@@ -43,8 +43,8 @@ qmanip.addNodeIdToIdTable = function(id)
 }
 
 qmanip.deleteNodeIdFromIdTable = function(idToDelete)
-{	
-	
+{
+
 	//Update id table
 	var tmpIdTable = [];
 	for(var i =0 ; i < qmanip.nodeIdTable.length ; ++i)
@@ -52,37 +52,32 @@ qmanip.deleteNodeIdFromIdTable = function(idToDelete)
 		if(qmanip.nodeIdTable[i] !== idToDelete)
 			tmpIdTable.push(qmanip.nodeIdTable[i]);
 	}
-	
+
 	qmanip.nodeIdTable = tmpIdTable;
 }
 
 qmanip.addNode = function()
 {
-	
 	qmanip.addNodeWithId(qmanip.nextNodeId());
-		
 }
 
 qmanip.addNodeWithId = function(nodeId)
 {
-	cy.add({
-		data:{id:nodeId,bg:'#000000'}
-	});
-	
+	cy.add({data:{id:nodeId,bg:'#000000'}});
 	qmanip.addNodeIdToIdTable(nodeId);
 }
 
 qmanip.addNodeWithPosition = function(posx,posy){
 
 	var nodeId = qmanip.nextNodeId();
-	
+
 	cy.add({
 
 		data:{id:nodeId,bg:'#000000'},
 		position: {x:posx,y:posy},
-		
+
 	});
-	
+
 	qmanip.addNodeIdToIdTable(nodeId);
 
 };
@@ -119,12 +114,12 @@ qmanip.deleteNode = function(n)
 	cy.remove(n);
 
 	qmanip.deleteNodeIdFromIdTable(n.id());
-	
+
 };
 
 qmanip.deleteEdge = function(e)
 {
 
 	cy.remove(e);
-	
+
 };
