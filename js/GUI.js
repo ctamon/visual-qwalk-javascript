@@ -6,6 +6,22 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
 }
 
+function addNode() {
+    
+}
+
+function deleteNode() {
+    
+}
+
+function addEdge() {
+    
+}
+
+function deleteEdge() {
+    
+}
+
 function play() {
 	var element = document.getElementById("PlayButton");
 	if (element.alt == "Play") {
@@ -19,5 +35,4 @@ function play() {
     //elmt.innerHTML = "Play";
 	//elmt.style.backgroundColor = 'green';
 }
-
 }
