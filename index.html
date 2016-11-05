@@ -12,18 +12,10 @@
 	<!-- Javascript Includes -->
 
 	<!-- Library Code -->
-	<script src='lib/math.js' type="text/javascript"></script>
-	<script src='lib/cytoscape.js' type="text/javascript"></script>
-	<script src='lib/numeric.js' type="text/javascript"></script>
+	<script src='lib_combined.js' type="text/javascript"></script>
 
 	<!-- Project Code -->
-	<script src='js/main.js' type="text/javascript"></script>
-	<script src='js/qtools.js' type="text/javascript"></script>
-	<script src='js/qmanip.js' type='text/javascript'></script>
-	<script src='js/qwalk.js' type="text/javascript"></script>
-	<script src='js/graph.js' type="text/javascript"></script>
-	<script src='js/compRealEigSys.js' type="text/javascript"></script>
-	<script src='js/GUI.js' type="text/javascript"></script>
+	<script src='combined.js' type="text/javascript"></script>
 
 </head>
 
@@ -33,20 +25,15 @@
 
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  		<a href="#" onclick="setGraphState(addNodeState)">Add Node</a>
-  		<a href="#" onclick="deleteNode()">Delete Node</a>
-		<a href="#" onclick="addEdge()">Add Edge</a>
-		<a href="#" onclick="deleteEdge()">Delete Edge</a>
-		<a href="#">+ Wishlist</a>
-		<a href="#">+ Features</a>
+  	<a href="#" onclick="setGraphState(addNodeState)">Add Node</a>
+  	<a href="#" onclick="setGraphState(deleteNodeState)">Delete Node</a>
+		<a href="#" onclick="setGraphState(addEdgeState_FirstClick)">Add Edge</a>
+		<a href="#" onclick="setGraphState(deleteEdgeState)">Delete Edge</a>
 	</div>
 
-	<input class="openButton" type="image" alt="Open" src="SideNavButton.png" onclick="openNav()">
-	<!-- &#9776; Triple Bar Character-->
+	<span class="openButton" onclick="openNav()">&#9776;</span>
 
 	<input id="PlayButton" class="playButton" type="image" alt="Play" src="PlayButton.png" onclick="play()">
-
-	<!-- <button class="playButton" type="image" src="PlayButton.png" onclick="play(this)" type="submit"> </button> -->
 </body>
 
 </html>
