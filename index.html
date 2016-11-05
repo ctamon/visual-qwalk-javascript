@@ -33,16 +33,17 @@
 
 	<div id="mySidenav" class="sidenav">
 		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  	<a href="#" onclick="setGraphState(addNodeState)">Add Node</a>
-  	<a href="#" onclick="deleteNode()">Delete Node</a>
+  		<a href="#" onclick="setGraphState(addNodeState)">Add Node</a>
+  		<a href="#" onclick="deleteNode()">Delete Node</a>
 		<a href="#" onclick="addEdge()">Add Edge</a>
 		<a href="#" onclick="deleteEdge()">Delete Edge</a>
 		<a href="#">+ Wishlist</a>
 		<a href="#">+ Features</a>
 	</div>
 
-	<span class="openButton" onclick="openNav()">&#9776;</span>
-
+	<input class="openButton" type="image" alt="Open" src="SideNavButton.png" onclick="openNav()"> 
+	<!-- &#9776; Triple Bar Character-->
+	
 	<input id="PlayButton" class="playButton" type="image" alt="Play" src="PlayButton.png" onclick="play()">
 
 	<!-- <button class="playButton" type="image" src="PlayButton.png" onclick="play(this)" type="submit"> </button> -->

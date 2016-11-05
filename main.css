@@ -57,6 +57,9 @@ html, body {
 	font-size: 60px;
     color: #878787;
 	cursor: pointer;
+    position: absolute;
+    width: 50px;
+    top: 50px;
 }
 
 /* Play Button */
