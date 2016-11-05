@@ -50,7 +50,7 @@ function main() {
 				graphState = addEdgeState_SecondClick
 			} else if (graphState === addEdgeState_SecondClick) {
 				if (evt.cyTarget.id() !== source_node) {
-					qmanip.addEdge(source_node, evt.cyTarget.id())
+					qmanip.addEdgeByIds(source_node, evt.cyTarget.id())
 					graphState = neutralState
 				}
 			} else if (graphState === deleteNodeState) {
