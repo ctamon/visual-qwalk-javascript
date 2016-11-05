@@ -68,23 +68,23 @@ graph.listToMatrix = function(G) {
 };
 
 graph.place_graph = function(graph) {
-	nodes = getVertices(graph)
-
+	nodes = getVertices(graph);
+	
 	// add nodes to graph
 	for (var i = 0; i < nodes.length; i++) {
-		cy.add({group: 'nodes', data: {id: 'n'+i.toString(), bg: 'black'}})
+		qmanip.addNodeWithId('n'+i);
 	}
+	qmanip.nodeCounter = nodes.length;
 
 	// add edges
 	for (var i = 0; i < graph.length; i++) {
-		id = 'e' + i.toString()
-		source = 'n' + graph[i][0].toString()
-		target = 'n' + graph[i][1].toString()
-		cy.add({group: 'edges', data: {id: id, source: source, target: target}})
+		source = 'n' + graph[i][0].toString();
+		target = 'n' + graph[i][1].toString();
+		qmanip.addEdge(source,target);
 	}
 
 	// compute placements
-	cy.layout({name: 'circle'})
+	cy.layout({name: 'circle'});
 };
 
 // Create a path graph

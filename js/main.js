@@ -39,7 +39,9 @@ function main() {
 	});
 
 	//Create dummy graph and animate quantum walk
+
 	var A = graph.pathGraph(3);
 	qwalk.startFromMatrix(A,0);
 
+	
 };
