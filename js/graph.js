@@ -80,7 +80,7 @@ graph.place_graph = function(graph) {
 	for (var i = 0; i < graph.length; i++) {
 		source = 'n' + graph[i][0].toString();
 		target = 'n' + graph[i][1].toString();
-		qmanip.addEdge(source,target);
+		qmanip.addEdgeByIds(source,target);
 	}
 
 	// compute placements

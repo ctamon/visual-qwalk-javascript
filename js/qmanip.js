@@ -15,11 +15,13 @@ qmanip.compareNodeIds= function(id1,id2)
 
 }
 
+//Accepts an id and returns the node
 qmanip.getNode = function(id1)
 {
 	return cy.getElementById(id1);
 }
 
+//Accepts two node ids and returns the collection of edges between them
 qmanip.getEdges = function(id1,id2){
 	return cy.getElementById(id1).edgesWith(cy.getElementById(id2));
 };
@@ -80,7 +82,12 @@ qmanip.addNodeWithPosition = function(posx,posy){
 
 };
 
-qmanip.addEdge = function(id1,id2)
+qmanip.addEdge = function(n1,n2)
+{
+	return qmanip.addEdgeByIds(n1.data('id'),n2.data('id'));
+}
+
+qmanip.addEdgeByIds = function(id1,id2)
 {
 
 	if( qmanip.getEdges(id1,id2).length == 0 )
@@ -97,6 +104,7 @@ qmanip.addEdge = function(id1,id2)
 		});
 
 	}
+	else return -1;
 
 };
 

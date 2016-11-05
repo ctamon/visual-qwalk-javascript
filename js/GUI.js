@@ -10,10 +10,12 @@ souce_node = undefined
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
+    //document.getElementById("SideNavBtn")style..margin-left = "250px";
 }
 
 function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
+    //document.getElementById("SideNavBtn")style..margin-left = "0";
 }
 
 function setGraphState(state) {
