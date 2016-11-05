@@ -2,7 +2,11 @@ graphState = 0
 neutralState = 0
 addNodeState = 1
 deleteNodeState = 2
-addEdgeState = 3
+deleteEdgeState = 3
+addEdgeState_FirstClick = 4
+addEdgeState_SecondClick = 5
+
+souce_node = undefined
 
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
@@ -14,18 +18,6 @@ function closeNav() {
 
 function setGraphState(state) {
   graphState = state
-}
-
-function deleteNode() {
-
-}
-
-function addEdge() {
-
-}
-
-function deleteEdge() {
-
 }
 
 function play() {
