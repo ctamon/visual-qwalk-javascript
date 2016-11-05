@@ -1,3 +1,9 @@
+graphState = 0
+neutralState = 0
+addNodeState = 1
+deleteNodeState = 2
+addEdgeState = 3
+
 function openNav() {
     document.getElementById("mySidenav").style.width = "250px";
 }
@@ -6,20 +12,20 @@ function closeNav() {
     document.getElementById("mySidenav").style.width = "0";
 }
 
-function addNode() {
-    
+function setGraphState(state) {
+  graphState = state
 }
 
 function deleteNode() {
-    
+
 }
 
 function addEdge() {
-    
+
 }
 
 function deleteEdge() {
-    
+
 }
 
 function play() {

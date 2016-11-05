@@ -36,12 +36,16 @@ function main() {
 				}
 			}
 		]
-	});
+	})
+
+	cy.on('tap', function(evt) {
+		if (evt.cyTarget === cy && graphState === addNodeState) {
+			qmanip.addNodeWithPosition(evt.cyPosition.x, evt.cyPosition.y)
+			graphState = neutralState
+		}
+	})
 
 	//Create dummy graph and animate quantum walk
-
-	var A = graph.pathGraph(3);
-	qwalk.startFromMatrix(A,0);
-
-	
-};
+	var A = graph.pathGraph(3)
+	qwalk.startFromMatrix(A,0)
+}
