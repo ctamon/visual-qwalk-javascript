@@ -33,12 +33,7 @@ qwalk.startFromMatrix = function(A,start) {
 	graph.place_graph(graph.matrixToList(A));
 	qmanip.getNode('n'+start).data('isStart',true);
 	qwalk.walkStartIndex = start;
-	qwalk.walkIdTable = new Array(num_rows);
-	
-	for(var i = 0; i < num_rows; ++i )
-	{
-		qwalk.walkIdTable[i] = 'n'+i;
-	}
+	qwalk.walkIdTable = qmanip.nodeIdTable;
 	qwalk.curTime = 0;
 	qwalk.mat = A;
 	
