@@ -69,7 +69,9 @@ function main() {
   })
 
   // Generate initial graph
-  for (var i = 0; i < 3; i++) {qmanip.addNode()}
+  for (var i = 0; i < 3; i++) {
+    qmanip.addNode()
+  }
   qmanip.addEdge('n0', 'n1')
   qmanip.addEdge('n1', 'n2')
   // compute placements
