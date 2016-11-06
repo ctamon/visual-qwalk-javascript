@@ -16,12 +16,9 @@ var qtools = {};
 //
 // returns (Matrix): the resolved matrix
 //
-qtools.qwalk = function(A, t) {
-	var B = qtools.specdecomp(A)
+qtools.qwalk = function(B, N, t) {
 	var eigenvalues = B[0]
 	var eigenprojectors = B[1]
-
-	var N = numeric.dim(A)[0]
 
 	var U = numeric.t(numeric.rep([N, N], 0), numeric.rep([N, N], 0))
 
