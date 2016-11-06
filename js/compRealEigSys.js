@@ -382,7 +382,7 @@ function hqr2(N, A, B, low, igh, wi, wr, oPar) {
           }
         }//End else wi[j] > 0.0
 
-        t = Math.max(Math.abs(A[j][na]), Math.abs(A[j][en])
+        t = Math.max(Math.abs(A[j][na]), Math.abs(A[j][en]))
 
         if (t == 0.0) {
           continue; // go to top of for j loop
