@@ -1,12 +1,9 @@
-
 qmanip = {};
 
 qmanip.nodeCounter = 0;
 
-
 //Accepts an id and returns the node
-qmanip.getNode = function(id1)
-{
+qmanip.getNode = function(id1) {
   return cy.getElementById(id1);
 }
 
@@ -19,13 +16,12 @@ qmanip.nextNodeId = function() {
   return "n"+qmanip.nodeCounter++
 }
 
-qmanip.addNode = function()
-{
+qmanip.addNode = function() {
   var nodeId = qmanip.nextNodeId()
-	cy.add({data: {id: nodeId, bg: '#000000'}})
+  cy.add({data: {id: nodeId, bg: '#000000'}})
 }
 
-qmanip.addNodeWithPosition = function(posx,posy){
+qmanip.addNodeWithPosition = function(posx,posy) {
   var nodeId = qmanip.nextNodeId()
   cy.add({data: {id: nodeId, bg: '#000000'}, position: {x: posx,y: posy}})
 }
