@@ -27,8 +27,8 @@ qtools.qwalk = function(B, N, t) {
     U = U.add(eigenprojectors[i].mul(c))
   }
 
-  return U;
-};
+  return U
+}
 
 
 // Computes the spectral decomposition of a matrix A
@@ -64,7 +64,6 @@ qtools.specdecomp = function(A) {
     eigenvalue_list[i] = numeric.t([wr[i]], [wi[i]])
     if (wi[i] > 0) {hasComplex = true}
   }
-
 
   if (!hasComplex) {
     var re = numeric.rep([N, N], 0)
@@ -104,7 +103,7 @@ qtools.specdecomp = function(A) {
     }
   }
   return [eigenvalues, eigenprojectors]
-};
+}
 
 
 // Verifier: Checks if the eigenprojectors of a matrix
