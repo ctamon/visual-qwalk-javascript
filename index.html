@@ -2,39 +2,39 @@
 <html>
 
 <head>
-	<title>Quantum Walk Visualization</title>
+  <title>Quantum Walk Visualization</title>
 
-	<meta charset="UTF-8"/>
+  <meta charset="UTF-8"/>
 
-	<!-- CSS Stylesheet -->
-	<link rel="stylesheet" type="text/css" href="main.css">
+  <!-- CSS Stylesheet -->
+  <link rel="stylesheet" type="text/css" href="main.css">
 
-	<!-- Javascript Includes -->
+  <!-- Javascript Includes -->
 
-	<!-- Library Code -->
-	<script src='lib_combined.js' type="text/javascript"></script>
+  <!-- Library Code -->
+  <script src='lib_combined.js' type="text/javascript"></script>
 
-	<!-- Project Code -->
-	<script src='combined.js' type="text/javascript"></script>
+  <!-- Project Code -->
+  <script src='combined.js' type="text/javascript"></script>
 
 </head>
 
 <body onload='main()'>
 
-	<div id='hook'></div>
+  <div id='hook'></div>
 
-	<div id="mySidenav" class="sidenav">
-		<a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  		<a href="#" onclick="setGraphState(addNodeState)">Add Node</a>
-  		<a href="#" onclick="setGraphState(deleteNodeState)">Delete Node</a>
-		<a href="#" onclick="setGraphState(addEdgeState_FirstClick)">Add Edge</a>
-		<a href="#" onclick="setGraphState(deleteEdgeState)">Delete Edge</a>
-	</div>
+  <div id="mySidenav" class="sidenav">
+    <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+    <a href="#" onclick="setGraphState(addNodeState)">Add Node</a>
+    <a href="#" onclick="setGraphState(deleteNodeState)">Delete Node</a>
+    <a href="#" onclick="setGraphState(addEdgeState_FirstClick)">Add Edge</a>
+    <a href="#" onclick="setGraphState(deleteEdgeState)">Delete Edge</a>
+  </div>
 
-	<input id="SideNavBtn" class="openButton" type="image" alt="Open" src="SideNavButton.png" onclick="openNav()"> 
-	<!--&#9776; -->
+  <input id="SideNavBtn" class="openButton" type="image" alt="Open" src="SideNavButton.png" onclick="openNav()">
+  <!--&#9776; -->
 
-	<input id="PlayButton" class="playButton" type="image" alt="Play" src="PlayButton.png" onclick="play()">
+  <input id="PlayButton" class="playButton" type="image" alt="Play" src="PlayButton.png" onclick="play()">
 </body>
 
 </html>
