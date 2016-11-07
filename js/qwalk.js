@@ -12,14 +12,23 @@ qwalk.walkStartIndex = -1;
 qwalk.isStopped = false;
 qwalk.animationStatus = {isStopped: true,isRunning: false};
 
-function valToColor(value) {
-	if(value < 0 || value > 1) return '#000000'
+function valToRed(value) {
+	if(value < 0 || value > 1) return '#00';
 
-	var c = Math.floor(value * 255)
+	var c = Math.floor(value * 255);
 
-	if(c < 16) return '#0' + c.toString(16) + '0000'
-	else return '#' + c.toString(16) + '0000'
+	if(c < 16) return '#0' + c.toString(16);
+	else return '#' + c.toString(16);
 };
+
+function setColor(n,value)
+{
+	//var isStartComponent = ( n.data('isStart')===true ? '55' : '00');
+	
+	//n.data('bg',valToRed(value)+'00'+isStartComponent);
+
+	n.data('bg',valToRed(value)+'0000');
+}
 
 
 qwalk.startFromMatrix = function(A,start) {
@@ -31,7 +40,8 @@ qwalk.startFromMatrix = function(A,start) {
 	}
 
 	graph.place_graph(graph.matrixToList(A));
-	qmanip.getNode('n'+start).data('isStart',true);
+	
+	qmanip.setStartNode(qmanip.getNode('n'+start));
 	qwalk.walkStartIndex = start;
 	qwalk.walkIdTable = qmanip.nodeIdTable;
 	qwalk.curTime = 0;
@@ -143,7 +153,7 @@ qwalk.step = function() {
 	for (var i = 0; i < numeric.dim(qwalk.mat)[0]; i++) {
 		var ampl = numeric.t(U.x[i][startIndex],U.y[i][startIndex]);//getBlock([i, qwalk.walkStartIndex], [i, qwalk.walkStartIndex])
 		var prob = ampl.mul(ampl.conj()).x
-		cy.nodes('#' + qwalk.walkIdTable[i]).data('bg', valToColor(prob))
+		setColor(qmanip.getNode(qwalk.walkIdTable[i]),prob);
 	}
 	qwalk.curTime += qwalk.deltaTime
 };

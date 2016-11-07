@@ -63,7 +63,7 @@ qmanip.addNode = function()
 
 qmanip.addNodeWithId = function(nodeId)
 {
-	cy.add({data:{id:nodeId,bg:'#000000'}});
+	cy.add({data:{id:nodeId,isStart:false,bg:'#000000'}});
 	qmanip.addNodeIdToIdTable(nodeId);
 }
 
@@ -123,3 +123,12 @@ qmanip.deleteEdge = function(e)
 	cy.remove(e);
 
 };
+
+qmanip.setStartNode = function(n)
+{
+	//Set every node's isStart field to false
+	cy.nodes().data('isStart',false);
+	
+	//Set n's isStart to true
+	n.data('isStart',true);
+}

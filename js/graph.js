@@ -72,6 +72,7 @@ graph.place_graph = function(graph) {
 	
 	// add nodes to graph
 	for (var i = 0; i < nodes.length; i++) {
+		console.log('n'+i);
 		qmanip.addNodeWithId('n'+i);
 	}
 	qmanip.nodeCounter = nodes.length;

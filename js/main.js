@@ -31,7 +31,7 @@ function main() {
 			{
 				selector: 'node',
 				style: {
-					shape: 'circle',
+					'label': function(ele){ return ((ele.data('isStart') === true) ? '*' : '');},
 					'background-color': function(ele){return ele.data('bg')}
 				}
 			}
@@ -56,6 +56,9 @@ function main() {
 			} else if (graphState === deleteNodeState) {
 				qmanip.deleteNode(evt.cyTarget)
 				graphState = neutralState
+			} else if (graphState === setStartNodeState) {
+				qmanip.setStartNode(evt.cyTarget)
+				graphState = neutralState
 			}
 		} else if (evt.cyTarget.isEdge()) {
 			if (graphState === deleteEdgeState) {
@@ -67,5 +70,6 @@ function main() {
 
 	//Create dummy graph and animate quantum walk
 	var A = graph.pathGraph(3)
-	qwalk.startFromMatrix(A,0)
+	graph.place_graph(graph.matrixToList(A));
+	qmanip.setStartNode(qmanip.getNode('n0'));
 }

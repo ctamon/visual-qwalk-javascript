@@ -5,6 +5,7 @@ deleteNodeState = 2
 deleteEdgeState = 3
 addEdgeState_FirstClick = 4
 addEdgeState_SecondClick = 5
+setStartNodeState = 6
 
 souce_node = undefined
 
@@ -27,11 +28,13 @@ function play() {
 	if (element.alt == "Play") {
 		element.alt = "Stop";
 		element.src = "StopButton.png";
+		qwalk.startFromGraph();
     	//elmt.innerHTML = "Stop";
 		//elmt.style.backgroundColor = 'red';
 }	else {
 		element.alt = "Play";
 		element.src = "PlayButton.png";
+		qwalk.stop();
     //elmt.innerHTML = "Play";
 	//elmt.style.backgroundColor = 'green';
 }
