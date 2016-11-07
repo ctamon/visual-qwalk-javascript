@@ -365,7 +365,9 @@ function hqr2(N, A, B, low, igh, wi, wr, oPar) {
           vr = -(q*q) + (-p + wr[j])*(-p + wr[j]) + wi[j]*wi[j];
           vi = (-p + wr[j])*2.0*q;
           if ((vr == 0.0) && (vi == 0.0)){
-            tst1 = norm*[w,q,x,y,zz].map(Math.abs).reduce((acc,cur)=>acc+cur,0)
+            tst1 = norm*[w,q,x,y,zz].map(Math.abs).reduce(function(acc,cur) {
+              return acc+cur
+            }, 0)
             vr = tst1;
             do {
               vr *= 0.01;
