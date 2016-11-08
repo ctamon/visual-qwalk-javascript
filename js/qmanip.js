@@ -1,10 +1,11 @@
-qmanip = {};
+qmanip = {}
 
-qmanip.nodeCounter = 0;
+qmanip.nodeCounter = 0
+qmanip.startNodeColor = '#009acd'
 
 //Accepts an id and returns the node
-qmanip.getNode = function(id1) {
-  return cy.getElementById(id1);
+qmanip.getNode = function(id) {
+  return cy.getElementById(id);
 }
 
 //Accepts two node ids and returns the collection of edges between them
@@ -30,4 +31,14 @@ qmanip.addEdge = function(id1,id2) {
   if (qmanip.getEdges(id1,id2).length == 0 ) {
     cy.add({data: {id: "e"+id1+"-"+id2, source: id1, target: id2}})
   }
+}
+
+qmanip.setStartNode = function(id) {
+  cy.nodes().forEach(function(node, i) {
+    if (node.id() === id) {
+      qwalk.startIndex = i
+      node.style('border-color', qmanip.startNodeColor)
+      return false  // stop the iteration
+    }
+  })
 }

@@ -1,10 +1,9 @@
 qwalk = {}
 
-qwalk.path = undefined
 qwalk.mat = undefined
 qwalk.spectralDecomposition = undefined
 qwalk.deltaTime = 0.01
-qwalk.startNode = 'n0'
+qwalk.startIndex = undefined
 qwalk.timer = undefined
 
 function valToColor(value) {
@@ -16,25 +15,20 @@ function valToColor(value) {
 
 qwalk.startFromGraph = function() {
   // We need a startNode
-  if (qwalk.startNode === undefined) {
+  if (qwalk.startIndex === undefined) {
     throw new Error('No start position specified');
   }
 
-  // Build quantum walk path using breadth first search.
-  // Note: this will exclude unconnected nodes from the quantum walk
-  qwalk.path = []
-  var path = cy.elements().bfs({root: '#'+qwalk.startNode}).path
-  for (var i = 0; i < path.length; i += 2) {
-    qwalk.path.push(path[i].id())
-  }
-
-  //Build adjacency matrix
-  var numOfNodes = qwalk.path.length
-  qwalk.mat = numeric.rep([numOfNodes,numOfNodes],-1)
-  for(var i = 0; i < numOfNodes; ++i) {
-    for(var j = 0; j < numOfNodes; ++j) {
-      var edges = qmanip.getEdges(qwalk.path[i], qwalk.path[j])
-      qwalk.mat[i][j] = (edges.length != 0) ? 1 : 0
+  // Build adjacency matrix
+  var N = cy.nodes().length
+  qwalk.mat = numeric.rep([N, N], 0)
+  for (var i = 0; i < N; i++) {
+    for (var j = 0; j < N; j++) {
+      if (i == j) {
+        continue
+      }
+      var edges = qmanip.getEdges(cy.nodes()[i].id(), cy.nodes()[j].id())
+      qwalk.mat[i][j] = edges.length > 0 ? 1 : 0
     }
   }
 
@@ -49,13 +43,14 @@ qwalk.startFromGraph = function() {
 }
 
 qwalk.loop = function() {
-  var numOfNodes = qwalk.path.length
-  var U = qtools.qwalk(qwalk.spectralDecomposition, numOfNodes, qwalk.curTime)
-  for (var i = 0; i < numOfNodes; i++) {
-    // The amplitude is given by the first column of U
-    var ampl = U.getBlock([i, 0], [i, 0])
+  var N = cy.nodes().length
+  var U = qtools.qwalk(qwalk.spectralDecomposition, N, qwalk.curTime)
+  cy.nodes().forEach(function(node, i) {
+    // The amplitude is given by the nth column of U,
+    // where n = qwalk.startIndex
+    var ampl = U.getBlock([i, qwalk.startIndex], [i, qwalk.startIndex])
     var prob = ampl.mul(ampl.conj()).x[0][0]
-    cy.getElementById(qwalk.path[i]).data('bg', valToColor(prob))
-  }
+    node.data('bg', valToColor(prob))
+  })
   qwalk.curTime += qwalk.deltaTime
 }

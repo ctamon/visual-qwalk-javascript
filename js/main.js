@@ -1,6 +1,5 @@
 //Main graph object
 var cy;
-var startNodeColor = '#009acd'
 
 function assert(condition, message) {
   if (!condition) {
@@ -76,5 +75,5 @@ function main() {
   qmanip.addEdge('n1', 'n2')
   // compute placements
   cy.layout({name: 'circle', radius: 100, padding: 100});
-  cy.$('#n0').style('border-color', startNodeColor)
+  qmanip.setStartNode('n0')
 }
