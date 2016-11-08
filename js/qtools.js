@@ -19,8 +19,7 @@ var qtools = {};
 qtools.qwalk = function(B, N, t) {
   var eigenvalues = B[0]
   var eigenprojectors = B[1]
-
-  var U = numeric.t(numeric.rep([N, N], 0), numeric.rep([N, N], 0))
+  var U = qtools.zero(N)
 
   for (var i = 0; i < eigenvalues.length; i++) {
     var c = numeric.t([0], [-t]).mul(eigenvalues[i]).exp().get([0])
@@ -28,6 +27,15 @@ qtools.qwalk = function(B, N, t) {
   }
 
   return U
+}
+
+qtools.zero = function(N) {
+  return numeric.t(numeric.rep([N, N], 0), numeric.rep([N, N], 0))
+}
+
+qtools.real = function(A) {
+  var N = numeric.dim(A)[0]
+  return numeric.t(A, numeric.rep([N, N], 0))
 }
 
 
@@ -40,6 +48,28 @@ qtools.qwalk = function(B, N, t) {
 //   corresponding eigenprojectors
 //
 qtools.specdecomp = function(A) {
+  var eig = qtools.eig(A)
+  var eigenvalues = []
+  var eigenprojectors = []
+  for (var i = 0; i < numeric.dim(A)[0]; i++) {
+    var found = false
+    for (var j = 0; j < eigenvalues.length; j++) {
+      if (eig[0][i].sub(eigenvalues[j]).abs().x[0] < 0.0001) {
+        var v = eig[1].getRows(i, i).transjugate()
+        eigenprojectors[j] = eigenprojectors[j].add(v.dot(v.transjugate()))
+        found = true
+      }
+    }
+    if (!found) {
+      eigenvalues.push(eig[0][i])
+      var v = eig[1].getRows(i, i).transjugate()
+      eigenprojectors.push(v.dot(v.transjugate()))
+    }
+  }
+  return [eigenvalues, eigenprojectors]
+}
+
+qtools.eig = function(A) {
   var N = numeric.dim(A)[0]
   var B = numeric.rep([N, 2*N], 0)
   var wr = numeric.rep(N, 0)
@@ -54,15 +84,17 @@ qtools.specdecomp = function(A) {
    * are in wi, the associated eigenvectors are in the B matrix, and oPar.outEr
    * contains the error code. */
 
-   if (oPar.outEr != -1) {
+   if (oPar.outEr !== -1) {
      throw new Error('Eigenvector computation failed.')
    }
 
-  var eigenvalue_list = new Array(N)
+  var eigenvalues = new Array(N)
   var hasComplex = false
   for (var i = 0; i < N; i++) {
-    eigenvalue_list[i] = numeric.t([wr[i]], [wi[i]])
-    if (wi[i] > 0) {hasComplex = true}
+    eigenvalues[i] = numeric.t([wr[i]], [wi[i]])
+    if (wi[i] > 0) {
+      hasComplex = true
+    }
   }
 
   if (!hasComplex) {
@@ -72,9 +104,8 @@ qtools.specdecomp = function(A) {
         re[row][col] = B[row][col]
       }
     }
-    B = numeric.t(re, numeric.rep([N, N], 0))
-  }
-  else {
+    B = qtools.real(re)
+  } else {
     var re = numeric.rep([N, N], 0)
     var im = numeric.rep([N, N], 0)
     for (var row = 0; row < N; row++) {
@@ -85,52 +116,31 @@ qtools.specdecomp = function(A) {
     }
     B = numeric.t(re, im)
   }
-  var eigenvalues = []
-  var eigenprojectors = []
-  for (var i = 0; i < N; i++) {
-    var found = false
-    for (var j = 0; j < eigenvalues.length; j++) {
-      if (eigenvalue_list[i].sub(eigenvalues[j]).abs().x[0] < 0.0001) {
-        var v = B.getRows(i, i).transjugate()
-        eigenprojectors[j] = eigenprojectors[j].add(v.dot(v.transjugate()))
-        found = true
-      }
-    }
-    if (!found) {
-      eigenvalues.push(eigenvalue_list[i])
-      var v = B.getRows(i, i).transjugate()
-      eigenprojectors.push(v.dot(v.transjugate()))
-    }
-  }
-  return [eigenvalues, eigenprojectors]
+
+  return [eigenvalues, B]
 }
 
+qtools.norm = function(A) {
+  eig = qtools.eig(A.transjugate().dot(A).x)
+  return Math.max.apply(null, eig[0].map(function(c) {return c.x[0]}))
+}
 
 // Verifier: Checks if the eigenprojectors of a matrix
 //  sums to identity
 //
 // params:
-//  A (Matrix): Input matrix
+//  A (Matrix): Input matrix (must be square)
 //  eigenprojectors (list): Eigenprojectors of the matrix A
 //
 // return:
 //  Matrix 2-norm of the Z - identity
 //
-qtools.testBias = function(A, eigenprojectors) {
-  var size = numeric.dim(A);
-  var num_rows = size[0];
-  var num_cols = size[1];
-
-  var Z = numeric.repr([num_rows, num_cols], 0);
-
-  for (var j = 0; j < eigenprojectors.length; j++) {
-    Z = numeric.add(Z, eigenprojectors[j]);
-  }
-
-  var identity = numeric.identity(num_rows);
-
-  return numeric.norm2(numeric.subtract(Z, identity));
-};
+qtools.testBasis = function(N, eigenprojectors) {
+  var Z = eigenprojectors.reduce(function(acc, cur) {
+    return acc.add(cur)
+  }, qtools.zero(N))
+  return qtools.norm(qtools.real(numeric.identity(N)).sub(Z))
+}
 
 // Verifier: Checks if A = sum_{i} Eigenvalue[i] * EigenProjector[i]
 //
@@ -143,17 +153,33 @@ qtools.testBias = function(A, eigenprojectors) {
 //  Matrix 2-norm of Z-A
 //
 qtools.testDecomp = function(A, eigenvalues, eigenprojectors) {
-  var size = numeric.dim(A);
-  var num_rows = size[0];
-  var num_cols = size[1];
-
-  var Z = numeric.repr([num_rows, num_cols], 0);
-
-  if (eigenvalues.length != eigenprojectors.length) {
-    return Z;
+  var N = numeric.dim(A)[0]
+  if (eigenvalues.length !== eigenprojectors.length) {
+    throw new Error('Eigenvalue and eigenvector lists must have same length.')
   }
-  for (j = 0; j < eigenvalues.length; j++) {
-    Z.add(complex(eigenvalues[j]) + eigenprojectors[j]);
+  var Z = qtools.zero(N)
+  for (var i = 0; i < eigenvalues.length; i++) {
+    Z = Z.add(eigenvalues[i].get([0]).mul(eigenprojectors[i]))
   }
-  return numeric.norm2(numeric.subtract(Z, A));
-};
+  return qtools.norm(Z.sub(qtools.real(A)))
+}
+
+// Prints debug info to console to verify that the spectral decomposition of a
+// square matrix was computed correctly
+//
+// params:
+// A (Square Matrix): Input matrix
+// B (list): Spectral decomposition of A (B[0] has eigenvalues and
+//           B[1] has the eigenprojectors)
+//
+qtools.verify = function(A, B, verbose) {
+  if (verbose) {
+    console.log('A =', numeric.prettyPrint(A))
+    console.log('Eigenvalues =', numeric.prettyPrint(B[0]))
+    console.log('Eigenprojectors =', numeric.prettyPrint(B[1]))
+  }
+  var error = qtools.testBasis(numeric.dim(A)[0], B[1])
+  console.log('||I - SUM Eigenprojectors||_2 <=', error)
+  error = qtools.testDecomp(A, B[0], B[1])
+  console.log('||A - SUM Eigenvalue * Eigenprojector||_2 <=', error)
+}

@@ -42,6 +42,8 @@ qwalk.startFromGraph = function() {
   qwalk.curTime = 0
   // Compute and cache the spectral decomposition
   qwalk.spectralDecomposition = qtools.specdecomp(numeric.clone(qwalk.mat))
+  // Verify that spectral decomposition was computed correctly
+  qtools.verify(qwalk.mat, qwalk.spectralDecomposition, false)
   // Run qwalk
   qwalk.timer = setInterval(qwalk.loop, 25)
 }
