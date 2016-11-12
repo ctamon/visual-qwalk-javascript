@@ -1,16 +1,12 @@
+qwalk = {}
 
-qwalk = {};
-
-
-qwalk.ani = null;
-
-qwalk.walkIdTable = []; //A list of all node ids that exist now
-qwalk.mat = [];
-qwalk.deltaTime = 0.01;
+qwalk.path = undefined
+qwalk.mat = undefined
+qwalk.spectralDecomposition = undefined
+qwalk.deltaTime = 0.01
 qwalk.walkStartIndex = -1;
-
-qwalk.isStopped = false;
-qwalk.animationStatus = {isStopped: true,isRunning: false};
+qwalk.timer = undefined
+qwalk.animationStatus = {isStopped:true,isRunning:false};
 
 function valToRed(value) {
 	if(value < 0 || value > 1) return '#00';
@@ -31,37 +27,14 @@ function setColor(n,value)
 }
 
 
-qwalk.startFromMatrix = function(A,start) {
-	var shape = numeric.dim(A);
-	var num_rows = shape[0];
-	var num_cols = shape[1];
-	if (num_rows != num_cols) {
-		throw new Error('A must be a square matrix');
-	}
-
-	graph.place_graph(graph.matrixToList(A));
-	
-	qmanip.setStartNode(qmanip.getNode('n'+start));
-	qwalk.walkStartIndex = start;
-	qwalk.walkIdTable = qmanip.nodeIdTable;
-	qwalk.curTime = 0;
-	qwalk.mat = A;
-	
-	//Set the animation status's flags appropriately
-	qwalk.setAnimationStatusToStartFlags();
-	
-	//Loop
-	qwalk.loop();
-	
-};
-
-
 
 qwalk.startFromGraph = function()
 {
 
-	//Get id table
-	qwalk.walkIdTable = qmanip.nodeIdTable;
+	//Make walkIdTable
+	qwalk.walkIdTable = new Array(cy.nodes().length);
+	for(var i=0 ; i<cy.nodes().length ; ++i)
+		qwalk.walkIdTable[i] = cy.nodes()[i].id();
 	var startIndex = -1;
 	
 	var numOfNodes = qwalk.walkIdTable.length;
@@ -98,15 +71,16 @@ qwalk.startFromGraph = function()
 	//prob[startIndex] = 1;
 
 
-	//Set time
-	qwalk.curTime = 0;
 
 
 	//Set the animation status's flags appropriately
 	qwalk.setAnimationStatusToStartFlags();
-	
-	//The loop
-	qwalk.loop();
+	// Set time
+	qwalk.curTime = 0
+	// Compute and cache the spectral decomposition
+	qwalk.spectralDecomposition = qtools.specdecomp(numeric.clone(qwalk.mat))
+	// Run qwalk
+	qwalk.timer = setInterval(qwalk.loop, 25)
 
 };
 
@@ -121,64 +95,31 @@ qwalk.stop = function()
 	
 		qwalk.animationStatus.isStopped = true;
 	
-		qwalk.pause();
+		clearInterval(qwalk.timer);
 	
 		cy.nodes().data('bg','#000000');
 	
 		qwalk.curTime = 0;
-	
+
 }
 
-qwalk.pause = function()
-{
-	qwalk.animationStatus.isRunning = false;
-	if(qwalk.ani !== null)
-		qwalk.ani.stop();
+function valToColor(value) {
+  if(value < 0 || value > 1) return '#000000'
+  var c = Math.floor(value * 255)
+  if(c < 16) return '#0' + c.toString(16) + '0000'
+  else return '#' + c.toString(16) + '0000'
 }
 
-qwalk.unpause = function()
-{
-	if(!qwalk.animationStatus.isStopped)
-	{
-		qwalk.animationStatus.isRunning = true;
-		qwalk.loop();
-	}
-	else return -1;
+qwalk.loop = function() {
+  var numOfNodes = cy.nodes().length;
+  var startIndex = qwalk.walkStartIndex;
+  var U = qtools.qwalk(qwalk.spectralDecomposition, numOfNodes, qwalk.curTime)
+  for (var i = 0; i < numOfNodes; i++) {
+    // The amplitude is given by the first column of U
+    var ampl = numeric.t(U.x[i][startIndex],U.y[i][startIndex]);
+    var prob = ampl.mul(ampl.conj()).x;
+    cy.nodes()[i].data('bg', valToColor(prob))
+  }
+  qwalk.curTime += qwalk.deltaTime
 }
 
-
-qwalk.step = function() {
-	var startIndex = qwalk.walkStartIndex;
-	var U = qtools.qwalk(numeric.clone(qwalk.mat), qwalk.curTime)
-	for (var i = 0; i < numeric.dim(qwalk.mat)[0]; i++) {
-		var ampl = numeric.t(U.x[i][startIndex],U.y[i][startIndex]);//getBlock([i, qwalk.walkStartIndex], [i, qwalk.walkStartIndex])
-		var prob = ampl.mul(ampl.conj()).x
-		setColor(qmanip.getNode(qwalk.walkIdTable[i]),prob);
-	}
-	qwalk.curTime += qwalk.deltaTime
-};
-
-
-
-
-qwalk.loop = function()
-{
-
-	qwalk.ani = cy.animation({
-
-		complete: function(){
-			if(qwalk.animationStatus.isRunning)
-			{
-				qwalk.step();
-				qwalk.loop();
-			}
-		},
-
-		duration: 1000*qwalk.deltaTime
-
-	});
-
-
-	qwalk.ani.play();
-
-};

@@ -7,16 +7,19 @@ addEdgeState_FirstClick = 4
 addEdgeState_SecondClick = 5
 setStartNodeState = 6
 
-souce_node = undefined
+source_node = undefined
 
-function openNav() {
-    document.getElementById("mySidenav").style.width = "250px";
-    //document.getElementById("SideNavBtn")style..margin-left = "250px";
-}
-
-function closeNav() {
-    document.getElementById("mySidenav").style.width = "0";
-    //document.getElementById("SideNavBtn")style..margin-left = "0";
+function openClose() {
+  var button = document.getElementById('SideNavBtn')
+  if (button.alt === 'Open') {
+    document.getElementById('mySidenav').style.width = '250px'
+    document.getElementById('SideNavBtn').style.marginLeft = '250px'
+    button.alt = 'Close'
+  } else {
+    document.getElementById('mySidenav').style.width = '0'
+    document.getElementById('SideNavBtn').style.marginLeft = '0'
+    button.alt = 'Open'
+  }
 }
 
 function setGraphState(state) {
@@ -24,18 +27,13 @@ function setGraphState(state) {
 }
 
 function play() {
-	var element = document.getElementById("PlayButton");
-	if (element.alt == "Play") {
-		element.alt = "Stop";
-		element.src = "StopButton.png";
-		qwalk.startFromGraph();
-    	//elmt.innerHTML = "Stop";
-		//elmt.style.backgroundColor = 'red';
-}	else {
-		element.alt = "Play";
-		element.src = "PlayButton.png";
-		qwalk.stop();
-    //elmt.innerHTML = "Play";
-	//elmt.style.backgroundColor = 'green';
-}
+  if (document.getElementById("PlayButton").alt == "Play") {
+    document.getElementById("PlayButton").alt = "Stop";
+    document.getElementById("PlayButton").src = "StopButton.png";
+    qwalk.startFromGraph();
+  } else {
+    document.getElementById("PlayButton").alt = "Play";
+    document.getElementById("PlayButton").src = "PlayButton.png";
+    qwalk.stop();
+  }
 }
