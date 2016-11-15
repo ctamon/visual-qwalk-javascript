@@ -1,7 +1,8 @@
 qwalk = {}
 
 qwalk.mat = undefined
-qwalk.spectralDecomposition = undefined
+qwalk.eigenvalues = undefined
+qwalk.eigenprojectors = undefined
 qwalk.deltaTime = 0.01
 qwalk.startIndex = undefined
 qwalk.timer = undefined
@@ -16,7 +17,7 @@ function valToColor(value) {
 qwalk.startFromGraph = function() {
   // We need a startNode
   if (qwalk.startIndex === undefined) {
-    throw new Error('No start position specified');
+    throw new Error('No start position specified')
   }
 
   // Build adjacency matrix
@@ -35,22 +36,27 @@ qwalk.startFromGraph = function() {
   // Set time
   qwalk.curTime = 0
   // Compute and cache the spectral decomposition
-  qwalk.spectralDecomposition = qtools.specdecomp(numeric.clone(qwalk.mat))
+  var B = qtools.specdecomp(qwalk.mat)
+  qwalk.eigenvalues = B[0].map(function(x) {return numeric.t([x], [0])})
+  qwalk.eigenprojectors = B[1].map(function(x) {
+    return numeric.t(x, numeric.rep([N, N], 0))
+  })
   // Verify that spectral decomposition was computed correctly
-  qtools.verify(qwalk.mat, qwalk.spectralDecomposition, false)
+  qtools.testSpectralDecomposition(qwalk.mat, B, true)
   // Run qwalk
   qwalk.timer = setInterval(qwalk.loop, 25)
 }
 
 qwalk.loop = function() {
-  var N = cy.nodes().length
-  var U = qtools.qwalk(qwalk.spectralDecomposition, N, qwalk.curTime)
+  var N = cy.nodes().length, t = qwalk.curTime
+  var U = qtools.qwalk(qwalk.eigenvalues, qwalk.eigenprojectors, N, t)
   cy.nodes().forEach(function(node, i) {
     // The amplitude is given by the nth column of U,
     // where n = qwalk.startIndex
     var ampl = U.getBlock([i, qwalk.startIndex], [i, qwalk.startIndex])
     var prob = ampl.mul(ampl.conj()).x[0][0]
     node.data('bg', valToColor(prob))
+    node.data('prob', Math.round(prob*100))
   })
   qwalk.curTime += qwalk.deltaTime
 }

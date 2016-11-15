@@ -1,16 +1,6 @@
 //Main graph object
 var cy;
 
-function assert(condition, message) {
-  if (!condition) {
-    message = message || 'Assertion failed'
-    if (typeof Error !== 'undefined') {
-      throw new Error(message)
-    }
-    throw message  // Fallback
-  }
-}
-
 String.prototype.format = function() {
     var formatted = this;
     for( var arg in arguments ) {
@@ -21,7 +11,7 @@ String.prototype.format = function() {
 
 function main() {
   //Init main graph object
-  console.log('Initializing cytoscape.');
+  console.log('Initializing cytoscape')
   cy = cytoscape({
     container: document.getElementById('hook'),
 
@@ -32,6 +22,7 @@ function main() {
           shape: 'ellipse',
           width: 20,
           height: 20,
+          'label': 'data(prob)',
           'background-color': 'data(bg)',
           'border-color': '#000000',
           'border-width': 3
@@ -74,6 +65,9 @@ function main() {
   qmanip.addEdge('n0', 'n1')
   qmanip.addEdge('n1', 'n2')
   // compute placements
-  cy.layout({name: 'circle', radius: 100, padding: 100});
+  cy.layout({name: 'circle', radius: 100, padding: 100})
   qmanip.setStartNode('n0')
+
+  // Run tests on backend code
+  qtools.testAll(true)
 }
