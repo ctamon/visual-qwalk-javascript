@@ -63,11 +63,11 @@ function main() {
   for (var i = 0; i < 3; i++) {
     qmanip.addNode()
   }
-  qmanip.addEdge('n0', 'n1')
   qmanip.addEdge('n1', 'n2')
+  qmanip.addEdge('n2', 'n3')
   // compute placements
   cy.layout({name: 'circle', radius: 100, padding: 100})
-  qmanip.setStartNode('n0')
+  qmanip.setStartNode('n1')
 
   // Run tests on backend code
   qtools.testAll(true)
