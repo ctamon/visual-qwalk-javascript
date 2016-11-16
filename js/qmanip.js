@@ -25,7 +25,10 @@ qmanip.addNode = function() {
 
 qmanip.addNodeWithPosition = function(posx,posy) {
   var nodeId = qmanip.nextNodeId()
-  cy.add({data: {id: nodeId, bg: '#ffffff'}, position: {x: posx, y: posy}})
+  cy.add({
+    data: {id: nodeId, bg: '#ffffff', fg: '#ffffff'},
+    position: {x: posx, y: posy}
+  })
 }
 
 qmanip.addEdge = function(id1,id2) {
