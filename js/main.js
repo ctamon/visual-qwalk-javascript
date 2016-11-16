@@ -23,7 +23,7 @@ function main() {
           width: 20,
           height: 20,
           'label': 'data(prob)',
-          'background-color': 'data(bg)',
+          'background-color': 'data(fg)',
           'border-color': '#000000',
           'border-width': 3
         }
@@ -65,9 +65,9 @@ function main() {
   }
   qmanip.addEdge('n1', 'n2')
   qmanip.addEdge('n2', 'n3')
+  qmanip.setStartNode('n1')
   // compute placements
   cy.layout({name: 'circle', radius: 100, padding: 100})
-  qmanip.setStartNode('n1')
 
   // Run tests on backend code
   qtools.testAll(true)

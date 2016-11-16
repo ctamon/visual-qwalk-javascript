@@ -20,17 +20,17 @@ qmanip.nextNodeId = function() {
 
 qmanip.addNode = function() {
   var nodeId = qmanip.nextNodeId()
-  cy.add({data: {id: nodeId, bg: '#000000'}})
+  cy.add({data: {id: nodeId, bg: '#ffffff', fg: '#ffffff'}})
 }
 
 qmanip.addNodeWithPosition = function(posx,posy) {
   var nodeId = qmanip.nextNodeId()
-  cy.add({data: {id: nodeId, bg: '#000000'}, position: {x: posx,y: posy}})
+  cy.add({data: {id: nodeId, bg: '#ffffff'}, position: {x: posx, y: posy}})
 }
 
 qmanip.addEdge = function(id1,id2) {
   if (qmanip.getEdges(id1,id2).length == 0 ) {
-    cy.add({data: {id: "e"+id1+"-"+id2, source: id1, target: id2}})
+    cy.add({data: {id: ['e',id1,'-',id2].join(''), source: id1, target: id2}})
   }
 }
 
