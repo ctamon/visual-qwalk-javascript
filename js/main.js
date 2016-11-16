@@ -1,8 +1,8 @@
 //Main graph object
-var cy;
+var cy
 
 String.prototype.format = function() {
-    var formatted = this;
+    var formatted = this
     for( var arg in arguments ) {
         formatted = formatted.replace("{" + arg + "}", arguments[arg])
     }
@@ -42,12 +42,13 @@ function main() {
         srcNode = evt.cyTarget.id()
         graphState = addEdgeState_SecondClick
       } else if (graphState === addEdgeState_SecondClick) {
-        if (evt.cyTarget.id() !== srcNode) {
-          qmanip.addEdge(srcNode, evt.cyTarget.id())
-          graphState = neutralState
-        }
+        qmanip.addEdge(srcNode, evt.cyTarget.id())
+        graphState = neutralState
       } else if (graphState === deleteNodeState) {
         cy.remove(evt.cyTarget)
+        graphState = neutralState
+      } else if (graphState === setStartNodeState) {
+        qmanip.setStartNode(evt.cyTarget)
         graphState = neutralState
       }
     } else if (evt.cyTarget.isEdge()) {

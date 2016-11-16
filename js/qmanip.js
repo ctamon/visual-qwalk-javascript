@@ -14,7 +14,8 @@ qmanip.getEdges = function(id1,id2) {
 }
 
 qmanip.nextNodeId = function() {
-  return "n"+qmanip.nodeCounter++
+  qmanip.nodeCounter++
+  return "n"+qmanip.nodeCounter
 }
 
 qmanip.addNode = function() {

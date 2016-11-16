@@ -5,6 +5,7 @@ deleteNodeState = 2
 deleteEdgeState = 3
 addEdgeState_FirstClick = 4
 addEdgeState_SecondClick = 5
+setStartNodeState = 6
 
 srcNode = undefined
 
@@ -33,6 +34,6 @@ function play() {
   } else {
     document.getElementById("PlayButton").alt = "Play";
     document.getElementById("PlayButton").src = "PlayButton.png";
-    clearInterval(qwalk.timer)
+    qwalk.stop()
   }
 }

@@ -60,3 +60,9 @@ qwalk.loop = function() {
   })
   qwalk.curTime += qwalk.deltaTime
 }
+
+qwalk.stop = function() {
+  clearInterval(qwalk.timer)
+  cy.nodes().data('bg','#000000')
+  cy.nodes().data('prob', 0)
+}
